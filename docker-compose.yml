@@ -1,0 +1,22 @@
+name: auth
+networks:
+  auth-network:
+    driver: bridge
+
+volumes:
+  auth-mysql-data:
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: auth-mysql
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - auth-mysql-data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - auth-network
