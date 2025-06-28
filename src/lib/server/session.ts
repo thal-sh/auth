@@ -46,8 +46,18 @@ export const getSessionById = async (id: string): Promise<Session | null> => {
 	});
 };
 
-export const deleteSessionById = async (id: string): Promise<void> => {
+export const invalidateSession = async (id: string): Promise<void> => {
 	await prisma.session.delete({
 		where: { id }
 	});
 };
+
+export function deleteSessionTokenCookie(event: RequestEvent): void {
+	event.cookies.set('session', '', {
+		httpOnly: true,
+		path: '/',
+		secure: import.meta.env.PROD,
+		sameSite: 'lax',
+		maxAge: 0
+	});
+}
